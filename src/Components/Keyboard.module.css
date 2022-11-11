@@ -1,0 +1,15 @@
+.btn:hover {
+  background-color: lightblue;
+}
+
+.btn {
+  padding: 15;
+  background: transparent;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-size: xx-large;
+  width: 60px;
+  height: 60px;
+  text-align: center;
+}
