@@ -1,9 +1,10 @@
 type wordProps = {
   wordToGuess: string;
   lettersGuessed: string[];
+  isLoser: boolean;
 };
 
-export function Words({ wordToGuess, lettersGuessed }: wordProps) {
+export function Words({ wordToGuess, lettersGuessed, isLoser }: wordProps) {
   return (
     <div className="wordsWrapper" style={{ display: "flex", gap: 20 }}>
       {wordToGuess.split("").map((char) => {
@@ -22,9 +23,11 @@ export function Words({ wordToGuess, lettersGuessed }: wordProps) {
               <p
                 style={{
                   height: 10,
-                  visibility: lettersGuessed.includes(char)
-                    ? "visible"
-                    : "hidden",
+                  visibility:
+                    lettersGuessed.includes(char) || isLoser
+                      ? "visible"
+                      : "hidden",
+                  color: lettersGuessed.includes(char) ? "" : "red",
                 }}
               >
                 {char.toLocaleUpperCase()}

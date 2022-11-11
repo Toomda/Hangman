@@ -17,23 +17,10 @@ function App() {
     .split("")
     .every((letter) => lettersGuessed.includes(letter));
 
-  const reloadPage = () => {
+  const restartGame = () => {
+    console.log("reload");
     window.location.reload();
   };
-
-  useEffect(() => {
-    if (incorrectLetters.length === 7) {
-      console.log("Game lost! :-(");
-    }
-    if (
-      wordToGuess
-        .split("")
-        .every((letter) => lettersGuessed.includes(letter)) &&
-      incorrectLetters.length < 7
-    ) {
-      console.log("Game Won! :-)");
-    }
-  }, [lettersGuessed]);
 
   const addLetterToGuessedLetters = (letter: string) => {
     if (lettersGuessed.includes(letter)) return;
@@ -45,14 +32,16 @@ function App() {
 
   useEffect(() => {
     const handlePress = (e: KeyboardEvent) => {
-      addLetterToGuessedLetters(e.key);
-      // if (lettersGuessed.includes(e.key.toLocaleLowerCase())) return;
-      // setLettersGuessed((oldGuessedLetters) => [
-      //   ...oldGuessedLetters,
-      //   e.key.toLocaleLowerCase(),
-      // ]);
+      if ((isLoser || isWinner) && e.key.toLocaleLowerCase() === "enter") {
+        restartGame();
+      } else if (
+        !isLoser &&
+        !isWinner &&
+        new RegExp("^[a-zA-Z]$").test(e.key)
+      ) {
+        addLetterToGuessedLetters(e.key);
+      }
     };
-
     document.addEventListener("keydown", handlePress);
 
     return () => {
@@ -88,7 +77,7 @@ function App() {
                 cursor: "pointer",
                 marginTop: 30,
               }}
-              onClick={reloadPage}
+              onClick={restartGame}
             >
               Restart
             </button>
@@ -96,11 +85,16 @@ function App() {
         ) : null}
       </div>
       <Drawing wrongGuesses={incorrectLetters.length}></Drawing>
-      <Words wordToGuess={wordToGuess} lettersGuessed={lettersGuessed}></Words>
+      <Words
+        wordToGuess={wordToGuess}
+        lettersGuessed={lettersGuessed}
+        isLoser={isLoser}
+      ></Words>
       <Keyboard
         guessedLetters={lettersGuessed}
         incorrectLetters={incorrectLetters}
         addLetterToGuessedLetter={addLetterToGuessedLetters}
+        gameEnded={isLoser || isWinner}
       ></Keyboard>
     </div>
   );

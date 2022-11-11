@@ -34,12 +34,14 @@ type KeyboardProps = {
   guessedLetters: string[];
   incorrectLetters: string[];
   addLetterToGuessedLetter(letter: string): void;
+  gameEnded: boolean;
 };
 
 export function Keyboard({
   guessedLetters,
   incorrectLetters,
   addLetterToGuessedLetter,
+  gameEnded,
 }: KeyboardProps) {
   const onButtonClick = (e: any) => {
     e.preventDefault();
@@ -63,12 +65,17 @@ export function Keyboard({
 
         return (
           <button
-            className={styles.btn}
-            disabled={guessedLetters.includes(key)}
+            className={
+              guessedLetters.includes(key) ? styles.btn : styles.btnInactive
+            }
+            disabled={guessedLetters.includes(key) || gameEnded}
             style={{
               backgroundColor: wrongKey ? "red" : correctKey ? "lime" : "",
               color: wrongKey ? "white" : correctKey ? "black" : "",
-              cursor: guessedLetters.includes(key) ? "default" : "pointer",
+              cursor:
+                guessedLetters.includes(key) || gameEnded
+                  ? "default"
+                  : "pointer",
             }}
             onClick={onButtonClick}
           >
